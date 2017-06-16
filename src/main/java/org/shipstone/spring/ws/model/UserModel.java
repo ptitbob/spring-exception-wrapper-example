@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
  */
 public class UserModel {
 
-  @NotNull
+  @NotNull(message = "Le login est obligatoire")
   private String login;
 
   private String password;
