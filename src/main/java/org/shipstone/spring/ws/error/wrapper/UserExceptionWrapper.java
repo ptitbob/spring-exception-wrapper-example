@@ -1,7 +1,7 @@
 package org.shipstone.spring.ws.error.wrapper;
 
-import org.shipstone.spring.services.Exception.UserCreationException;
-import org.shipstone.spring.services.Exception.UserNotFoundException;
+import org.shipstone.spring.services.exception.UserCreationException;
+import org.shipstone.spring.services.exception.UserNotFoundException;
 import org.shipstone.spring.ws.error.model.ErrorMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +29,7 @@ public class UserExceptionWrapper {
         "666-09876",
         e.getMessage()
     );
-    LOGGER.warn("Erreur de création de user - URL : " + httpServletRequest.getRequestURL());
+    LOGGER.warn("Erreur de création de user - URL : {}", httpServletRequest.getRequestURL());
     return new ResponseEntity<>(errorMessage, HttpStatus.NOT_ACCEPTABLE);
   }
 
@@ -42,7 +42,7 @@ public class UserExceptionWrapper {
         "666-404",
         e.getMessage()
     );
-    LOGGER.warn("Erreur de création de user - URL : " + httpServletRequest.getRequestURL());
+    LOGGER.warn("Erreur de création de user - URL : {} - userId : {}", httpServletRequest.getRequestURL(), e.getUserId());
     return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
   }
 
