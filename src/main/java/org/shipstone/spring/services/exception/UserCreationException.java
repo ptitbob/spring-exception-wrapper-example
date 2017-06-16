@@ -1,4 +1,4 @@
-package org.shipstone.spring.services.Exception;
+package org.shipstone.spring.services.exception;
 
 import org.shipstone.spring.model.User;
 
