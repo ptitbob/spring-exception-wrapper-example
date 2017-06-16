@@ -1,8 +1,8 @@
 package org.shipstone.spring.ws;
 
 import org.shipstone.spring.model.User;
-import org.shipstone.spring.services.Exception.UserCreationException;
-import org.shipstone.spring.services.Exception.UserNotFoundException;
+import org.shipstone.spring.services.exception.UserCreationException;
+import org.shipstone.spring.services.exception.UserNotFoundException;
 import org.shipstone.spring.ws.model.UserModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
