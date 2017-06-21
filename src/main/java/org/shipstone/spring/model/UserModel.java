@@ -1,4 +1,4 @@
-package org.shipstone.spring.ws.model;
+package org.shipstone.spring.model;
 
 import javax.validation.constraints.NotNull;
 

@@ -1,9 +1,11 @@
 package org.shipstone.spring.ws;
 
 import org.shipstone.spring.model.User;
+import org.shipstone.spring.services.UserService;
 import org.shipstone.spring.services.exception.UserCreationException;
 import org.shipstone.spring.services.exception.UserNotFoundException;
-import org.shipstone.spring.ws.model.UserModel;
+import org.shipstone.spring.model.UserModel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,13 @@ import java.util.List;
 @RequestMapping("users")
 public class UserEndpoint {
 
+  private final UserService userService;
+
+  @Autowired
+  public UserEndpoint(UserService userService) {
+    this.userService = userService;
+  }
+
   @GetMapping
   public List<User> getUserList() {
     return new ArrayList<>();
@@ -35,11 +44,7 @@ public class UserEndpoint {
   public User getUserById(
       @PathVariable("userId") Long userId
   ) throws UserNotFoundException {
-    User user = null;
-    if (user == null) {
-      throw new UserNotFoundException(userId);
-    }
-    return user;
+    return userService.getUserById(userId);
   }
 
   @PostMapping
@@ -47,8 +52,7 @@ public class UserEndpoint {
       @Valid @ModelAttribute("user") UserModel userModel,
       UriComponentsBuilder uriComponentsBuilder
   ) throws UserCreationException {
-    User user = new User();
-    user.setId(1L);
+    User user = userService.createUser(userModel);
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setLocation(
         uriComponentsBuilder.path(
@@ -57,10 +61,6 @@ public class UserEndpoint {
             user.getId()
         ).toUri()
     );
-    if (user.getLogin() == null) {
-      // faut bien le faire planter :)
-      throw new UserCreationException(null);
-    }
     return new ResponseEntity<>(httpHeaders, HttpStatus.CREATED);
   }
 
