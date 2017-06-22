@@ -1,7 +1,7 @@
 package org.shipstone.spring.ws.error.wrapper;
 
+import org.shipstone.spring.services.exception.UpdateUserException;
 import org.shipstone.spring.services.exception.UserCreationException;
-import org.shipstone.spring.services.exception.UserNotFoundException;
 import org.shipstone.spring.ws.error.model.ErrorMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.servlet.http.HttpServletRequest;
+
+import static org.shipstone.spring.ws.error.wrapper.ExceptionWrapperUtils.USER_ERROR_CODE_PREFIXE;
 
 /**
  * @author François Robert
@@ -26,24 +28,23 @@ public class UserExceptionWrapper {
       UserCreationException e
   ) {
     ErrorMessage errorMessage = new ErrorMessage(
-        "666-09876",
+        USER_ERROR_CODE_PREFIXE.concat("09876"),
         e.getMessage()
     );
     LOGGER.warn("Erreur de création de user - URL : {}", httpServletRequest.getRequestURL());
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug("Exception : ", e);
+    }
     return new ResponseEntity<>(errorMessage, HttpStatus.NOT_ACCEPTABLE);
   }
 
-  @ExceptionHandler(UserNotFoundException.class)
-  public ResponseEntity<ErrorMessage> reflectedUserNotFoundException(
-      HttpServletRequest httpServletRequest,
-      UserNotFoundException e
-  ) {
-    ErrorMessage errorMessage = new ErrorMessage(
-        "666-404",
-        e.getMessage()
-    );
-    LOGGER.warn("Erreur de création de user - URL : {} - userId : {}", httpServletRequest.getRequestURL(), e.getUserId());
-    return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
+  @ExceptionHandler(UpdateUserException.class)
+  public ResponseEntity<ErrorMessage> reflectiveUpdateUserException(UpdateUserException e) {
+    LOGGER.warn("Erreur de mise à jour du user {} - message : {}", e.getUserId(), e.getMessage());
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug("Exception : ", e);
+    }
+    return new ResponseEntity<ErrorMessage>(new ErrorMessage(USER_ERROR_CODE_PREFIXE.concat("01234"), e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
 }

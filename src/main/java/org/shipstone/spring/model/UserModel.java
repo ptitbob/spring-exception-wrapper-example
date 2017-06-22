@@ -7,6 +7,8 @@ import javax.validation.constraints.NotNull;
  */
 public class UserModel {
 
+  private Long userId;
+
   @NotNull(message = "Le login est obligatoire")
   private String login;
 
@@ -15,6 +17,14 @@ public class UserModel {
   private String lastname;
 
   private String firstname;
+
+  public Long getUserId() {
+    return userId;
+  }
+
+  public void setUserId(Long userId) {
+    this.userId = userId;
+  }
 
   public String getLogin() {
     return login;
