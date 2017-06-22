@@ -1,7 +1,7 @@
 package org.shipstone.spring.ws;
 
 import org.shipstone.spring.model.User;
-import org.shipstone.spring.services.UserService;
+import org.shipstone.spring.services.UserServiceImpl;
 import org.shipstone.spring.services.exception.UpdateUserException;
 import org.shipstone.spring.services.exception.UserCreationException;
 import org.shipstone.spring.services.exception.EntityNotFoundException;
@@ -32,10 +32,10 @@ import java.util.Objects;
 @RequestMapping("users")
 public class UserEndpoint {
 
-  private final UserService userService;
+  private final UserServiceImpl userService;
 
   @Autowired
-  public UserEndpoint(UserService userService) {
+  public UserEndpoint(UserServiceImpl userService) {
     this.userService = userService;
   }
 
@@ -48,7 +48,8 @@ public class UserEndpoint {
   public User getUserById(
       @PathVariable("userId") Long userId
   ) throws EntityNotFoundException {
-    return userService.getUserById(userId);
+    User user = userService.getUserById(userId);
+    return user;
   }
 
   @PostMapping

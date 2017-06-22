@@ -1,7 +1,6 @@
 package org.shipstone.spring.ws;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,7 +8,7 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.shipstone.spring.model.User;
 import org.shipstone.spring.model.UserModel;
-import org.shipstone.spring.services.UserService;
+import org.shipstone.spring.services.UserServiceImpl;
 import org.shipstone.spring.services.exception.EntityNotFoundException;
 import org.shipstone.spring.services.exception.UpdateUserException;
 import org.shipstone.spring.services.exception.UserCreationException;
@@ -27,7 +26,7 @@ import static org.junit.Assert.*;
 public class UserEndpointTest implements UserFactory {
 
   private UserEndpoint userEndPoint;
-  private UserService userService;
+  private UserServiceImpl userService;
 
   @Before
   public void setup() {
@@ -125,9 +124,9 @@ public class UserEndpointTest implements UserFactory {
     }
   }
 
-  private UserService getUserServiceMock() {
+  private UserServiceImpl getUserServiceMock() {
     if (userService == null) {
-      userService = Mockito.mock(UserService.class);
+      userService = Mockito.mock(UserServiceImpl.class);
     }
     return userService;
   }
