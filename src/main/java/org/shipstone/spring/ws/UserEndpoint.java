@@ -1,6 +1,7 @@
 package org.shipstone.spring.ws;
 
 import org.shipstone.spring.model.User;
+import org.shipstone.spring.services.UserService;
 import org.shipstone.spring.services.UserServiceImpl;
 import org.shipstone.spring.services.exception.UpdateUserException;
 import org.shipstone.spring.services.exception.UserCreationException;
@@ -32,7 +33,7 @@ import java.util.Objects;
 @RequestMapping("users")
 public class UserEndpoint {
 
-  private final UserServiceImpl userService;
+  private final UserService userService;
 
   @Autowired
   public UserEndpoint(UserServiceImpl userService) {
