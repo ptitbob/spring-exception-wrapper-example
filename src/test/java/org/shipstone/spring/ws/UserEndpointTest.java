@@ -13,11 +13,13 @@ import org.shipstone.spring.services.exception.EntityNotFoundException;
 import org.shipstone.spring.services.exception.UpdateUserException;
 import org.shipstone.spring.services.exception.UserCreationException;
 import org.shipstone.spring.ws.error.exception.IncoherentResourceIdFormException;
+import org.shipstone.spring.ws.error.model.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import static org.junit.Assert.*;
+import static org.shipstone.spring.ws.error.wrapper.ExceptionWrapperUtils.USER_ERROR_CODE_PREFIXE;
 
 /**
  * @author François Robert
@@ -122,6 +124,19 @@ public class UserEndpointTest implements UserFactory {
     } catch (UpdateUserException e) {
       throw e;
     }
+  }
+
+  @Test
+  public void reflectiveUpdateUserException() throws Exception {
+    EntityNotFoundException entityNotFoundException = new EntityNotFoundException(User.class, 1L);
+    UpdateUserException updateUserException = new UpdateUserException("Message", 1L, entityNotFoundException);
+    ResponseEntity<ErrorMessage> errorMessageResponseEntity = userEndPoint.reflectiveUpdateUserException(updateUserException);
+    assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, errorMessageResponseEntity.getStatusCode());
+    assertNotNull(errorMessageResponseEntity.getBody());
+    assertTrue(ErrorMessage.class.isAssignableFrom(errorMessageResponseEntity.getBody().getClass()));
+    ErrorMessage errorMessage = errorMessageResponseEntity.getBody();
+    assertEquals(USER_ERROR_CODE_PREFIXE.concat("01234"), errorMessage.getCode());
+    assertEquals(updateUserException.getMessage(), errorMessage.getMessage());
   }
 
   private UserServiceImpl getUserServiceMock() {

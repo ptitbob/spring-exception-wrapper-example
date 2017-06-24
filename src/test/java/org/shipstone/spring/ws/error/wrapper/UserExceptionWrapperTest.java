@@ -48,17 +48,4 @@ public class UserExceptionWrapperTest implements HttpServletRequestFactory, User
     assertEquals(userCreationException.getMessage(), errorMessage.getMessage());
   }
 
-  @Test
-  public void reflectiveUpdateUserException() throws Exception {
-    EntityNotFoundException entityNotFoundException = new EntityNotFoundException(User.class, 1L);
-    UpdateUserException updateUserException = new UpdateUserException("Message", 1L, entityNotFoundException);
-    ResponseEntity<ErrorMessage> errorMessageResponseEntity = userExceptionWrapper.reflectiveUpdateUserException(updateUserException);
-    assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, errorMessageResponseEntity.getStatusCode());
-    assertNotNull(errorMessageResponseEntity.getBody());
-    assertTrue(ErrorMessage.class.isAssignableFrom(errorMessageResponseEntity.getBody().getClass()));
-    ErrorMessage errorMessage = errorMessageResponseEntity.getBody();
-    assertEquals(USER_ERROR_CODE_PREFIXE.concat("01234"), errorMessage.getCode());
-    assertEquals(updateUserException.getMessage(), errorMessage.getMessage());
-  }
-
 }

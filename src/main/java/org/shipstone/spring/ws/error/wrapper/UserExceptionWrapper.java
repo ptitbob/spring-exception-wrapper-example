@@ -38,13 +38,4 @@ public class UserExceptionWrapper {
     return new ResponseEntity<>(errorMessage, HttpStatus.NOT_ACCEPTABLE);
   }
 
-  @ExceptionHandler(UpdateUserException.class)
-  public ResponseEntity<ErrorMessage> reflectiveUpdateUserException(UpdateUserException e) {
-    LOGGER.warn("Erreur de mise à jour du user {} - message : {}", e.getUserId(), e.getMessage());
-    if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug("Exception : ", e);
-    }
-    return new ResponseEntity<ErrorMessage>(new ErrorMessage(USER_ERROR_CODE_PREFIXE.concat("01234"), e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-  }
-
 }

@@ -8,10 +8,14 @@ import org.shipstone.spring.services.exception.UserCreationException;
 import org.shipstone.spring.services.exception.EntityNotFoundException;
 import org.shipstone.spring.model.UserModel;
 import org.shipstone.spring.ws.error.exception.IncoherentResourceIdFormException;
+import org.shipstone.spring.ws.error.model.ErrorMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,12 +30,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static org.shipstone.spring.ws.error.wrapper.ExceptionWrapperUtils.USER_ERROR_CODE_PREFIXE;
+
 /**
  * @author François Robert
  */
 @RestController
 @RequestMapping("users")
 public class UserEndpoint {
+
+  private final static Logger LOGGER = LoggerFactory.getLogger(UserEndpoint.class);
 
   private final UserService userService;
 
@@ -82,4 +90,14 @@ public class UserEndpoint {
     }
     return new ResponseEntity<>(HttpStatus.OK);
   }
+
+  @ExceptionHandler(UpdateUserException.class)
+  public ResponseEntity<ErrorMessage> reflectiveUpdateUserException(UpdateUserException e) {
+    LOGGER.warn("Erreur de mise à jour du user {} - message : {}", e.getUserId(), e.getMessage());
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug("Exception : ", e);
+    }
+    return new ResponseEntity<>(new ErrorMessage(USER_ERROR_CODE_PREFIXE.concat("01234"), e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
 }
