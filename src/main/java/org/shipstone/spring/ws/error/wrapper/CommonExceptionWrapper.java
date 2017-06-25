@@ -23,7 +23,7 @@ public class CommonExceptionWrapper {
   private static final Logger LOGGER = LoggerFactory.getLogger(CommonExceptionWrapper.class);
 
   @ExceptionHandler(EntityNotFoundException.class)
-  public ResponseEntity<ErrorMessage> reflectedUserNotFoundException(
+  public ResponseEntity<ErrorMessage> reflectedEntityNotFoundException(
       HttpServletRequest httpServletRequest,
       EntityNotFoundException e
   ) {

@@ -1,12 +1,9 @@
 package org.shipstone.spring.ws.error.wrapper;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.shipstone.spring.model.User;
 import org.shipstone.spring.services.exception.EntityNotFoundException;
@@ -41,7 +38,7 @@ public class CommonExceptionWrapperTest implements HttpServletRequestFactory {
   public void reflectedUserNotFoundException() throws Exception {
     HttpServletRequest httpServletRequest = getHttpServletRequest();
     EntityNotFoundException entityNotFoundException = new EntityNotFoundException(User.class, 1L);
-    ResponseEntity<ErrorMessage> errorMessageResponseEntity = commonExceptionWrapper.reflectedUserNotFoundException(httpServletRequest, entityNotFoundException);
+    ResponseEntity<ErrorMessage> errorMessageResponseEntity = commonExceptionWrapper.reflectedEntityNotFoundException(httpServletRequest, entityNotFoundException);
     assertNotNull(errorMessageResponseEntity);
     assertEquals(HttpStatus.NOT_FOUND, errorMessageResponseEntity.getStatusCode());
     assertNotNull(errorMessageResponseEntity.getBody());
